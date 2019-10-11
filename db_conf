@@ -9,13 +9,13 @@ tables:
 	services:
 		*service_id
 		title
-		descriprion
+		description
 		
 	reports:
 		*report_id
 		service_id
 		title
-		descriprion
+		description
 		image
 		status
 		timestamp
@@ -26,6 +26,6 @@ tables:
 		*push_id
 		report_id
 		from_service_id
-		to_sevice_id
+		to_service_id
 		username
 	
