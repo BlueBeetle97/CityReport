@@ -1,0 +1,31 @@
+tables:
+	employees:
+		*username
+		password
+		service_id
+		name
+		surname
+		
+	services:
+		*service_id
+		title
+		descriprion
+		
+	reports:
+		*report_id
+		service_id
+		title
+		descriprion
+		image
+		status
+		timestamp
+		long
+		latt
+		
+	pushed_reports:
+		*push_id
+		report_id
+		from_service_id
+		to_sevice_id
+		username
+	
