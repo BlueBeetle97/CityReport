@@ -1,6 +1,7 @@
 tables:
 	employees:
-		*username
+		*user_id
+		username
 		password
 		service_id
 		name
@@ -27,5 +28,5 @@ tables:
 		report_id
 		from_service_id
 		to_service_id
-		username
+		user_id
 	
