@@ -20,8 +20,8 @@ tables:
 		image
 		status
 		timestamp
-		long
-		latt
+		lon
+		lat
 		
 	pushed_reports:
 		*push_id
