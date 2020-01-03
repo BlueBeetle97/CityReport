@@ -13,10 +13,11 @@ if ($_SESSION['login'] == false) {
             $query = 'SELECT * FROM employees WHERE username=? AND password=PASSWORD(?) AND service_id=?';
             $stmt = $conn->prepare($query);
             $stmt->execute([$_POST['username'], $_POST['password'], $_POST['service_id']]);
-            $userExists = $stmt->fetch();
+            $userExists = $stmt->fetch(PDO::FETCH_ASSOC);
+            $conn = null;
             if ($userExists) {
                 $_SESSION['login'] = true;
-                $_SESSION['service_id'] = $_POST['service_id'];
+                $_SESSION['user_id'] = $userExists['user_id'];
                 http_response_code(200);
                 return;
             } else {

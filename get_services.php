@@ -9,11 +9,9 @@
         $table = $stmt->fetchAll();
         $conn = null;
         if ($table) {
-            $count = 1;
             foreach ($table as $row) {
                 echo '<option value="'.$row['service_id'].'">'.$row['title'].'</option>';
             }
-            $count ++;
         }
     } catch (PDOException $e) {
         $log = fopen("log.txt", "w") or die($empty_table);

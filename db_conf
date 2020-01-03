@@ -29,4 +29,5 @@ tables:
 		from_service_id
 		to_service_id
 		user_id
+		og_timestamp
 	

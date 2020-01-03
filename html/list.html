@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+
+	<title>List</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/carousel.css">
+	<link rel="stylesheet" href="css/modal.css">
+	<!-- Custom styles for this template -->
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+		<a class="navbar-brand"><img src="images/logos/fix_my_logo.png" /></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+			aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				
+
+			</ul>
+
+			<button class="btn btn-info btn-primary" onclick="logout()">
+				<span class="fas fa-sign-out-alt"></span> Αποσύνδεση
+			</button>
+		</div>
+	</nav>
+
+	<main role="main" class="container">
+		<h2 align="center">
+			Καλώς ορίσατε!
+		</h2>
+		<p align="center">
+			Σε αυτήν τη λίστα θα βρείτε αναφορές προβλημάτων.
+		</p>
+		<p>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">Κωδικός Αναφορας</th>
+							<th scope="col">Τίτλος</th>
+							<th scope="col">Τοποθεσία</th>
+							<th scope="col">Ημερομηνία Υποβολής</th>
+							<th scope="col">Κατάσταση Προβλήματος Αναφοράς</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</p>
+	</main><!-- /.container -->
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div id='details'></div>
+		</div>
+	</div>
+	<!-- Bootstrap core JavaScript
+   ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+	<script>window.jQuery || document.write('<script src="https://code.jquery.com/jquery-3.3.1.min.js"><\/script>')</script>
+	<script>
+		var table = $('tbody');
+
+		var refresh = function () {
+			table.load("list.php", function () {
+				setTimeout(refresh, 5000);
+			});
+		};
+
+		refresh();
+	</script>
+	<script>
+		function check(report_id) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					document.getElementById('details').innerHTML = this.responseText;
+					var modal = document.getElementById('myModal');
+					modal.style.display = "block";
+				}
+			}
+			xmlhttp.open('POST', 'details.php', true);
+			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlhttp.send('report_id=' + report_id);
+		}
+	</script>
+	<script>
+		var modal = document.getElementById('myModal');
+		var span = document.getElementsByClassName("close")[0];
+		span.onclick = function () {
+			modal.style.display = "none";
+		}
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		} 
+	</script>
+	<script>
+		function modal_off() {
+			modal.style.display = "none";
+		}
+	</script>
+	<script>
+		function respond(responce, report_id) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					check(report_id);
+					if (this.response == 403) {
+						document.getElementById('details').innerHTML = '<font color="RED">DB Connection Error!!</font>';
+						var modal = document.getElementById('myModal');
+						modal.style.display = "block";
+
+					}
+				}
+			}
+			xmlhttp.open('POST', 'respond.php', true);
+			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlhttp.send('responce=' + responce + '&report_id=' + report_id);
+		}
+	</script>
+	<script>
+		function forward(responce, report_id) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					modal_off();
+					if (this.response == 403) {
+						document.getElementById('details').innerHTML = '<font color="RED">DB Connection Error!!</font>';
+						var modal = document.getElementById('myModal');
+						modal.style.display = "block";
+
+					}
+				}
+			}
+			xmlhttp.open('POST', 'respond.php', true);
+			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlhttp.send('forward=' + responce + '&report_id=' + report_id);
+		}
+	</script>
+	<script>
+		function remove(report_id) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					modal_off();
+					if (this.response == 403) {
+						document.getElementById('details').innerHTML = '<font color="RED">DB Connection Error!!</font>';
+						var modal = document.getElementById('myModal');
+						modal.style.display = "block";
+
+					}
+				}
+			}
+			xmlhttp.open('POST', 'respond.php', true);
+			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlhttp.send('delete=' + true + '&report_id=' + report_id);
+		}
+	</script>
+	<script>
+		function logout() {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					location.reload(true);
+				}
+			}
+			xmlhttp.open('POST', 'logout.php', true);
+			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlhttp.send();
+
+		}
+	</script>
+</body>
+
+</html>
