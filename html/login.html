@@ -1,0 +1,108 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+  <title>Login page</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link href="./css/carousel.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <a class="navbar-brand"><img src="./images/logos/fix_my_logo.png" /></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="./about">Ποιοί είμαστε; <span class="sr-only">(current)</span></a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <main role="main" class="container">
+
+    <form name="form-login">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input name="username" type="username" class="form-control" id="username" aria-describedby="emailHelp"
+          placeholder="Παρακαλούμε εισάγετε username">
+      </div>
+      <div class="form-group">
+        <label for="password">Κωδικός πρόσβασης</label>
+        <input name="password" type="password" class="form-control" id="password"
+          placeholder="Παρακαλούμε εισάγετε κωδικό πρόσβασης">
+      </div>
+      <div class="etc-login-form">
+      </div>
+      <div class="form-group">
+        <label for="form">Σε ποιά υπηρεσία εργάζεστε;</label>
+        <select name="service_id" class="form-control" id="form">
+        </select>
+      </div>
+      <p id="error"></p>
+      <button type="button" onclick="login()" value="login" class="btn btn-primary cmd-login-form">Είσοδος</button>
+    </form>
+
+  </main><!-- /.container -->
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    window.onload = function () {
+      var request = new XMLHttpRequest();
+      request.open('GET', 'get_services.php', false);  // `false` makes the request synchronous
+      request.send();
+
+      if (request.status === 200) {
+        document.getElementById('form').innerHTML = request.responseText;
+      }
+    }
+  </script>
+  <script>
+    function login() {
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+      var service_id = document.getElementById('form').value;
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            location.reload(true);
+          } else if (this.status == 500) {
+            document.getElementById('error').innerHTML = '<font color="red">Πρόβλημα Αυθεντικοποίησης</font>';
+          } else {
+            document.getElementById('error').innerHTML = '<font color="red">Απροσδόκητο Πρόβλημα</font>';
+          }
+        }
+      }
+      xmlhttp.open('POST', 'login.php', true);
+      xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xmlhttp.send('username=' + username + '&password=' + password + '&service_id=' + service_id);
+
+    }
+  </script>
+
+
+</body>
+
+</html>
