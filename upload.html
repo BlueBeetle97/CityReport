@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">.
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+<body>
+
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        Select image:
+        <input type="file" accept="image/*" name="image" id="image">
+        <br>
+
+        Latitude
+        <input type="text" name="lat" id="lat" value="37.789">
+
+        Longitude
+        <input type="text" name="lon" id="lon" value="26.708">
+        <br>
+
+        <div id="map"></div>
+
+        Select Service:
+        <select name="service_id" id="service_id"><select>
+        <br>
+
+        Write report title:
+        <input type="text" name="title" id="title">
+        <br>
+
+        Write description to upload:
+        <input type="text" name="desc" id="desc">
+        <br>
+
+        <input type="submit" name="submit">
+    </form>
+
+    <script>
+        window.onload = function () {
+          var request = new XMLHttpRequest();
+          request.onreadystatechange = function () {
+              
+          }
+          request.open('GET', 'get_services.php', false);  // `false` makes the request synchronous
+          request.send();
+    
+          if (request.status === 200) {
+            document.getElementById('service_id').innerHTML = request.responseText;
+          }
+        }
+      </script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>
+        function addMapPicker() {
+            var mapCenter = [37.789, 26.708];
+            var map = L.map('map', {
+                center: mapCenter,
+                minZoom: 2,
+                zoom: 12
+            });
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                subdomains: ['a', 'b', 'c']
+            }).addTo(map);
+
+            var marker = L.marker(mapCenter).addTo(map);
+            var updateMarker = function (lat, lng) {
+                marker
+                    .setLatLng([lat, lng])
+                    .bindPopup("Your location :  " + marker.getLatLng().toString())
+                    .openPopup();
+                return false;
+            };
+            map.on('click', function (e) {
+                $('#lat').val(e.latlng.lat);
+                $('#lon').val(e.latlng.lng);
+                updateMarker(e.latlng.lat, e.latlng.lng);
+            });
+
+            var updateMarkerByInputs = function () {
+                return updateMarker($('#lat').val(), $('#lon').val());
+            }
+            $('#lat').on('input', updateMarkerByInputs);
+            $('#lon').on('input', updateMarkerByInputs);
+        }
+
+        $(document).ready(function () {
+            addMapPicker();
+        });
+    </script>
+    <style>
+        input {
+            margin-bottom: 2px;
+        }
+
+        #map {
+            width: 550px;
+            height: 300px;
+        }
+    </style>
+</body>
+
+</html>

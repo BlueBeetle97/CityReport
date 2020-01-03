@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-if ($_SESSION['login'] == false) {
     try {
         $conn = new PDO('mysql:host=localhost;dbname=city_report', 'root');
         // set the PDO error mode to exception
@@ -23,7 +20,4 @@ if ($_SESSION['login'] == false) {
         fwrite($log, $e);
         fclose($log);
     }
-}
-
-
 ?>
